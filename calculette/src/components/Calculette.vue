@@ -39,12 +39,15 @@
         <div @click="division">/</div>
         <div @click="equal">=</div>
       </div>
-      
     </div>
+
+    <button @click="resultat">Afficher historique résultats</button>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'Calculette',
   props: {
@@ -102,8 +105,35 @@ export default {
         parseFloat(this.prevNum), 
         parseFloat(this.number) // sans parseFloat, chiffre considéré comme string
         )}`; //on prend les deux chiffres enregistrés et on les utilise avec l'operateur cliqué
+      let result = this.number;
       this.prevNum = '';
+
+      let url = "http://localhost/backend_calculette/controller.php";
+
+      axios.post(url,{
+          result : result
+        },{
+          headers : {
+              'Content-Type': 'text/plain',  
+        }
+      }) 
+      .then(response => {
+        console.log(response);
+        //document.location.reload();
+      })
+      .catch(e => {
+        console.log(e);
+      })
       
+   },
+   resultat(){
+     axios.get('http://localhost/backend_calculette/reception.php')
+      .then(response => {
+          console.log(response)
+      })
+      .catch(error => {
+        console.log(error);
+      });
    }
   }
 }
@@ -168,5 +198,12 @@ export default {
 
   .calculette-ligne5 div{
     width: 50px;
+  }
+
+  button{
+    margin-top: 30px;
+    padding: 5px;
+    background-color: black;
+    color: white;
   }
 </style>

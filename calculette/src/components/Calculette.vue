@@ -4,40 +4,40 @@
     <div class="calculette">
 
       <div class="affichage">
-        <div class="lignes-affichage">Hello</div>
+        <div class="lignes-affichage">{{number || '0'}}</div>
       </div>
 
       <div class="lignes calculette-ligne1">
-        <div>C</div>
-        <div>Del</div>
+        <div @click="clear">C</div>
+        <div @click="remove">Del</div>
       </div>
       
       <div class="lignes calculette-ligne2">
-        <div>7</div>
-        <div>8</div>
-        <div>9</div>
-        <div>X</div>
+        <div @click="append('7')">7</div>
+        <div @click="append('8')">8</div>
+        <div @click="append('9')">9</div>
+        <div @click="multiplication">X</div>
       </div>
 
       <div class="lignes calculette-ligne3">
-        <div>4</div>
-        <div>5</div>
-        <div>6</div>
-        <div>-</div>
+        <div @click="append('4')">4</div>
+        <div @click="append('5')">5</div>
+        <div @click="append('6')">6</div>
+        <div @click="substraction">-</div>
       </div>
 
       <div class="lignes calculette-ligne4">
-        <div>1</div>
-        <div>2</div>
-        <div>3</div>
-        <div>+</div>
+        <div @click="append('1')">1</div>
+        <div @click="append('2')">2</div>
+        <div @click="append('3')">3</div>
+        <div @click="addition">+</div>
       </div>
 
       <div class="lignes calculette-ligne5">
-        <div>0</div>
-        <div>.</div>
-        <div>/</div>
-        <div>=</div>
+        <div @click="append('0')">0</div>
+        <div @click="dot">.</div>
+        <div @click="division">/</div>
+        <div @click="equal">=</div>
       </div>
       
     </div>
@@ -49,6 +49,62 @@ export default {
   name: 'Calculette',
   props: {
     msg: String
+  },
+  data(){
+    return{
+      prevNum: null,
+      number: '',
+      operator: null,
+      operatorClicked: false
+    }
+  },
+  methods:{
+    clear(){
+      this.number = ''; //On réinitialise this.number dans les data
+    },
+    append(num){
+      if(this.operatorClicked){ // si on à cliqué sur un opérateur, on reinitialise this.number pour entrer le second chiffre
+        this.number= '';
+        this.operatorClicked=false
+      }
+      this.number = `${this.number}${num}`; //on ajoute le chiffre sélectionné à la suite de ce qui est déja entré dans this.number
+    },
+    remove(){
+      this.number = this.number.slice(0, -1); // on enleve le dernier chiffre de this.number
+    },
+    setPrevNum(){
+      this.prevNum = this.number;
+      this.operatorClicked = true;
+    },
+    dot(){
+      if(this.number.indexOf('.') === -1){ // si il n'y a pas de virgule dans le chiffre, en rajoute une 
+        this.append('.');
+      }
+    },
+    addition(){
+      this.operator = (a, b) => a + b;
+      this.setPrevNum(); // on enregistre le premier nombre du calcul
+    },
+    substraction(){
+      this.operator = (a, b) => a - b;
+      this.setPrevNum(); // on enregistre le premier nombre du calcul
+    },
+    multiplication(){
+      this.operator = (a, b) => a * b;
+      this.setPrevNum(); // on enregistre le premier nombre du calcul
+    },
+    division(){
+      this.operator = (a, b) => a / b;
+      this.setPrevNum(); // on enregistre le premier nombre du calcul
+    },
+    equal(){
+      this.number = `${this.operator(
+        parseFloat(this.prevNum), 
+        parseFloat(this.number) // sans parseFloat, chiffre considéré comme string
+        )}`; //on prend les deux chiffres enregistrés et on les utilise avec l'operateur cliqué
+      this.prevNum = '';
+      
+   }
   }
 }
 </script>

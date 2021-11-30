@@ -60,7 +60,9 @@ export default {
       number: '',
       operator: null,
       operatorClicked: false,
-      lignes: null
+      lignes: null,
+      url_controller : "http://localhost/backend_calculette/controller.php",
+      url_reception : 'http://localhost/backend_calculette/reception.php',
     }
   },
   methods:{
@@ -110,9 +112,8 @@ export default {
       let result = this.number;
       this.prevNum = '';
 
-      let url = "http://localhost/backend_calculette/controller.php";
 
-      axios.post(url,{
+      axios.post(this.url_controller,{
           result : result
         },{
           headers : {
@@ -129,7 +130,7 @@ export default {
       
    },
    resultat(){
-     axios.get('http://localhost/backend_calculette/reception.php')
+     axios.get(this.url_reception)
       .then(response => {
           this.lignes = response.data;
           console.log(response.data)

@@ -42,6 +42,7 @@
     </div>
 
     <button @click="resultat">Afficher historique résultats</button>
+    <div class="historique-affichage">{{lignes}}</div>
   </div>
 </template>
 
@@ -58,7 +59,8 @@ export default {
       prevNum: null,
       number: '',
       operator: null,
-      operatorClicked: false
+      operatorClicked: false,
+      lignes: null
     }
   },
   methods:{
@@ -129,7 +131,8 @@ export default {
    resultat(){
      axios.get('http://localhost/backend_calculette/reception.php')
       .then(response => {
-          console.log(response)
+          this.lignes = response.data;
+          console.log(response.data)
       })
       .catch(error => {
         console.log(error);
@@ -205,5 +208,12 @@ export default {
     padding: 5px;
     background-color: black;
     color: white;
+  }
+
+  .historique-affichage{
+    margin-top: 20px;
+    font-size:30px;
+    width: 90%;
+    word-wrap: break-word;
   }
 </style>

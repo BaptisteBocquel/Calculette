@@ -1,5 +1,7 @@
 <?php
 
+//PARTIE RECEPTION DES DONNEES DU FRONTEND
+
 $_POST = json_decode(file_get_contents("php://input"),true); // on decode ce qui est envoyé par le front
 
 // Permet d'éviter les problèmes de CORS (sécurité)
@@ -11,7 +13,7 @@ header('Content-Type: text/plain');
 
 $result = $_POST['result']; // on recupére le résultat envoyé par axios
 
-file_put_contents('resultats.txt', "$result ", FILE_APPEND);
+file_put_contents('resultats.txt', "$result ", FILE_APPEND); // on ajoute ce résultat au fichier .txt avec un saut de ligne
 
 
 ?>

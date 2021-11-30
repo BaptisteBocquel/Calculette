@@ -1,5 +1,7 @@
 <?php
 
+    //PARTIE ENVOIE DES DONNEES AU FRONTEND
+
     // Permet d'éviter les problèmes de CORS (sécurité)
 
     header('Access-Control-Allow-Origin: *');
@@ -12,10 +14,10 @@
     $total = count($fichier); // Nombre total des lignes du fichier
 
     for($i = 0; $i < $total; $i++) 
-    { // Départ de la boucle
+    { 
         
         echo $fichier[$i]; // On affiche ligne par ligne le contenu du fichier
 
-    } // Fin de la boucle
+    } 
 
 ?>
